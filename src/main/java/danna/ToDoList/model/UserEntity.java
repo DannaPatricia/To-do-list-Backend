@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import danna.ToDoList.dto.UserRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -30,14 +31,15 @@ public class UserEntity {
 
     @NotBlank // No puede estar vacio
     @Column(unique=true) //Nombre unico
-    private String userName;
+    private String username;
 
     @NotBlank
     @Column(unique=true)
     private String email;
 
     @NotBlank
-    private String passwordHash;
+    @Column(name="password_hash")
+    private String password;
     private String role;
 
     @CreatedDate // Marca que este campo se llena automáticamente cuando se crea la entidad.
@@ -63,18 +65,25 @@ public class UserEntity {
     @ManyToMany(mappedBy="sharedWith")
     private List<TaskEntity> sharedTasks;
 
-    // Constructor
+    // Constructores
     public UserEntity(){}
+
+    public UserEntity(UserRequestDto dto) {
+        this.username = dto.getUsername();
+        this.email = dto.getEmail();
+        this.password = dto.getPassword();
+    }
+
 
     // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getUsername() { return userName; }
-    public void setUsername(String userName) { this.userName = userName; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getPassword() { return passwordHash; }
-    public void setPassword(String passwordHash) { this.passwordHash = passwordHash; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
