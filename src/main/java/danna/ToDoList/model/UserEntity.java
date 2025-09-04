@@ -12,6 +12,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -50,6 +51,21 @@ public class UserEntity {
     @OneToMany(mappedBy="user") // mappedBy -> Indica donde esta la relacion en la otra entidad, o sea es el nombre del atributo user en TaskEntity
     private List<TaskEntity> tasks; // Para que desde el usuario se pueda acceder a su lista de task
 
+    @OneToMany(mappedBy="user")
+    private List<ListEntity> lists;
+
+    @OneToMany(mappedBy="user")
+    private List<TagEntity> tags;
+
+    // No crea tabla intermedia, dice "Este lado no es propietario de la relación; usa la relación que está declarada en la otra entidad"
+    // para ello hay que poner el nombre del atributo de la otra entidad que contiene la relación. 
+    // Entidad propietario de la relacion: TaskEntity
+    @ManyToMany(mappedBy="sharedWith")
+    private List<TaskEntity> sharedTasks;
+
+    // Constructor
+    public UserEntity(){}
+
     // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -71,4 +87,17 @@ public class UserEntity {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public List<ListEntity> getLists() {return lists;}
+    public void setLists(List<ListEntity> lists) {this.lists = lists;}
+
+    public List<TagEntity> getTags() {return tags;}
+    public void setTags(List<TagEntity> tags) {this.tags = tags;}
+
+    public List<TaskEntity> getSharedTasks() {
+        return sharedTasks;
+    }
+    public void setSharedTasks(List<TaskEntity> sharedTasks) {
+        this.sharedTasks = sharedTasks;
+    }
 }
