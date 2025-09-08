@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import danna.ToDoList.dto.UserLoginDto;
 import danna.ToDoList.dto.UserRequestDto;
 import danna.ToDoList.service.UserService;
 
@@ -27,5 +28,12 @@ public class UserController {
     public ResponseEntity<UserRequestDto> createUser(@RequestBody UserRequestDto newUserDto) {
         return userService.createUser(newUserDto);
     }
+
+    // Metodo para iniciar sesion, pilla por parametro el nombre de usuario y la contraseña, usando el dto
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginDto> loginUser(@RequestBody UserLoginDto userDto) {
+        return userService.loginUser(userDto);
+    }
+    
     
 }

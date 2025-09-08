@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import danna.ToDoList.dto.UserLoginDto;
 import danna.ToDoList.dto.UserRequestDto;
 import danna.ToDoList.model.UserEntity;
 import danna.ToDoList.repository.UserRepository;
@@ -19,6 +20,9 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Response entity es un objeto que representa toda la respuesta http
+    // DTO -> data transfer object -> para separar la estructura de datos del cliente, 
+    // evitando exponer la lógica interna o la estructura completa de las entidades de la base de datos.
     public ResponseEntity<UserRequestDto> createUser(UserRequestDto newUserDto){
         // Se crea un userEntity a partir del userDto
         UserEntity userEntity = new UserEntity(newUserDto);
@@ -36,6 +40,17 @@ public class UserService {
             // return ResponseEntity.ok(new UserRequestDto(userRepository.save(userEntity)));
         }
         // Caso en que el usuario ya existe, devuelve conflicto
+        // con el .build() se devuelve la respuesta sin cuerpo
         return ResponseEntity.status(409).build();
+    }
+
+    public ResponseEntity<UserLoginDto> loginUser(UserLoginDto userDto){
+        return userRepository.findByUsername(userDto.getUsername())
+        // Se filtra por el usuario cuya contraseña coincida
+        .filter(user -> passwordEncoder.matches(userDto.getPassword(), user.getPassword()))
+        // se obtiene el mismo user y se transforma la entidad en dto como respuesta
+        .map(user -> ResponseEntity.ok(new UserLoginDto(user)))
+        // si no existe el user o la contraseña no coincide se manda un body vacio
+        .orElse(ResponseEntity.status(401).build());
     }
 }

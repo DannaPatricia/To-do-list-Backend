@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import danna.ToDoList.dto.UserLoginDto;
 import danna.ToDoList.dto.UserRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -71,6 +72,11 @@ public class UserEntity {
     public UserEntity(UserRequestDto dto) {
         this.username = dto.getUsername();
         this.email = dto.getEmail();
+        this.password = dto.getPassword();
+    }
+
+    public UserEntity(UserLoginDto dto) {
+        this.username = dto.getUsername();
         this.password = dto.getPassword();
     }
 

@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-@EnableJpaAuditing 
+// Activa la auditoria
+@EnableJpaAuditing // Esto le perimite a java rellenar automaticamente la fecha (no se creo que es temporar porque en teoria ya lo hace postgres)
 public class ToDoListApplication {
 
 	public static void main(String[] args) {
