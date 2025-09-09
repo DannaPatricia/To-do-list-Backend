@@ -2,6 +2,8 @@ package danna.ToDoList.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,12 +18,18 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // Se encarga de autenticar ususarios y devuelve un autenfication valido si el login fue correcto
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // Postman o APIs públicas
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/user/login", "/api/user/register", "/api/user").permitAll()
+                .requestMatchers("/api/user/searchUser", "/api/user/login", "/api/user/register", "/api/user").permitAll()
                 .anyRequest().authenticated()
             );
 

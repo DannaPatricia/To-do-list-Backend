@@ -4,7 +4,7 @@ import danna.ToDoList.model.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 
-public class UserRequestDto {
+public class UserRegisterDto {
     @NotBlank // No puede estar vacio
     @Column(unique=true) //Nombre unico
     private String username;
@@ -19,10 +19,10 @@ public class UserRequestDto {
 
 
     // Constructores
-    public UserRequestDto(){}
+    public UserRegisterDto(){}
 
     // Crea un dto a partir de un entity
-    public UserRequestDto(UserEntity entity) {
+    public UserRegisterDto(UserEntity entity) {
         this.password = entity.getPassword();
         this.username = entity.getUsername();
         this.email = entity.getEmail();

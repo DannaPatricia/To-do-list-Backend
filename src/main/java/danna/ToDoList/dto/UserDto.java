@@ -3,7 +3,7 @@ package danna.ToDoList.dto;
 import danna.ToDoList.model.UserEntity;
 import jakarta.validation.constraints.NotBlank;
 
-public class UserLoginDto {
+public class UserDto {
     @NotBlank
     private String username;
 
@@ -11,8 +11,8 @@ public class UserLoginDto {
     private String password;
 
     // Constructores
-    public UserLoginDto(){}
-    public UserLoginDto(UserEntity entity){
+    public UserDto(){}
+    public UserDto(UserEntity entity){
         this.username = entity.getUsername();
     }
 

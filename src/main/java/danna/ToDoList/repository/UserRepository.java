@@ -1,5 +1,6 @@
 package danna.ToDoList.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,4 +31,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>{
 
     // Metodo para encontrar coincidencias por username de usuario
     boolean existsByUsername(String username);
+
+    // Esta query permitiria regresar las coindcidencias que encuentra con el string parametro sin importar mayusculas o minusculas
+    List<UserEntity> findByUsernameContainingIgnoreCase(String namePart);
 }
