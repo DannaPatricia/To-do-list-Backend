@@ -29,8 +29,9 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // Postman o APIs públicas
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/user/searchUser", "/api/user/login", "/api/user/register", "/api/user").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/api/user/login", "/api/user/register")
+                .permitAll() // estas rutas se pueden usar sin sesión
+                .anyRequest().authenticated() // todas las demás requieren sesión
             );
 
         return http.build();
