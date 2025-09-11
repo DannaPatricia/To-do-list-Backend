@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/user/login", "/api/user/register")
                 .permitAll() // estas rutas se pueden usar sin sesión
                 .anyRequest().authenticated() // todas las demás requieren sesión
+
             );
             // .formLogin(form -> form
             //     .loginProcessingUrl("/api/user/login")
