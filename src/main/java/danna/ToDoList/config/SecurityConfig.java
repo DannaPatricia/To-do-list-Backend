@@ -29,7 +29,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // Postman o APIs públicas
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/user/searchUser", "/api/user/login", "/api/user/register", "/api/user").permitAll()
+                .requestMatchers("/api/user/searchUser", "/api/user/login", "/api/user/register", "/api/user", "/api/lists").permitAll()
                 .anyRequest().authenticated()
             );
 
