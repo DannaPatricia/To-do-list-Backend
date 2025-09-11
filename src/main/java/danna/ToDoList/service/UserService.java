@@ -106,11 +106,6 @@ public class UserService {
     // LIST -> Es una colección de objetos que se almacena directamente en la memoria principal del programa.
     // STREAM -> es una secuencia de procesamiento que opera sobre los datos (que pueden provenir de una lista) de manera eficiente y perezosa, mejorando el rendimiento
     public List<UserDto> searchUserByUsername(String usernamePart, HttpServletRequest request){
-        HttpSession session = request.getSession(false);
-        log.info("Session ID: {}", session != null ? session.getId() : "No session");
-        log.info("Authentication: {}", SecurityContextHolder.getContext().getAuthentication());
-
-
         return userRepository.findByUsernameContainingIgnoreCase(usernamePart)
         // Convieto la lista en un stream de java para poder acceder a sus funciones
         .stream()
