@@ -2,8 +2,6 @@ package danna.ToDoList.service;
 
 import java.util.List;
 
-import javax.naming.AuthenticationException;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +15,7 @@ import danna.ToDoList.dto.UserDto;
 import danna.ToDoList.dto.UserRegisterDto;
 import danna.ToDoList.model.UserEntity;
 import danna.ToDoList.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class UserService {
@@ -68,15 +67,16 @@ public class UserService {
     // }
 
     
-    public ResponseEntity<UserDto> loginUser(UserDto userDto){
+    public ResponseEntity<UserDto> loginUser(UserDto userDto, HttpServletRequest request){
         // Spring valida automaticamente el usuario usando el CustomUserDetailsService
         Authentication auth = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
         );
 
-        // Se guarda la sesion + la cookie JSESSIONID
+        // Se guarda la sesion + la cookie JSESSIONID a nivel java, no se crea en el servidor?
         SecurityContextHolder.getContext().setAuthentication(auth);
-
+        // fuerza creacion de la sesion HTTP y cookie JSESSIONID
+        request.getSession(true);
         // Se obtiene el user entity para devolver el dto por seguridad, en caso de no encontrar la entidad lanza una excepcion
         UserEntity userEntity = userRepository.findByUsername(userDto.getUsername())
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));

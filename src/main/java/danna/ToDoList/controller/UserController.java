@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import danna.ToDoList.dto.UserDto;
 import danna.ToDoList.dto.UserRegisterDto;
 import danna.ToDoList.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -34,9 +35,12 @@ public class UserController {
     }
 
     // Metodo para iniciar sesion, pilla por parametro el nombre de usuario y la contraseña, usando el dto
+    // HttpServletRequest -> Representa la peticion http, asi se podra forzar la creacion de la cookie al poder aceder a la peticion
+    // Se leyo previamente que la mejor pratica es usar tokens, pero debido a su complejidad se decidio no usarlo
+    // Como es el primer proyecto fullstack con SpringBoot y angular se decidio no realizar codigos mas complejos y asegurar el aprendizaje
     @PostMapping("/login")
-    public ResponseEntity<UserDto> loginUser(@RequestBody UserDto userDto) {
-        return userService.loginUser(userDto);
+    public ResponseEntity<UserDto> loginUser(@RequestBody UserDto userDto, HttpServletRequest request) {
+        return userService.loginUser(userDto, request);
     }
     
     @GetMapping("/searchUser")

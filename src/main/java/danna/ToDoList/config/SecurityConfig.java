@@ -33,6 +33,21 @@ public class SecurityConfig {
                 .permitAll() // estas rutas se pueden usar sin sesión
                 .anyRequest().authenticated() // todas las demás requieren sesión
             );
+            // .formLogin(form -> form
+            //     .loginProcessingUrl("/api/user/login")
+            //     .successHandler((request, response, authentication) -> {
+            //         response.setContentType("application/json");
+            //         response.getWriter().write("{\"message\":\"Login correcto\"}");
+            //     })
+            //     .failureHandler((request, response, exception) -> {
+            //         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            //         response.setContentType("application/json");
+            //         response.getWriter().write("{\"error\":\"Credenciales incorrectas\"}");
+            //     })
+            // )
+            // .sessionManagement(session -> session
+            //     .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            // );
 
         return http.build();
     }
