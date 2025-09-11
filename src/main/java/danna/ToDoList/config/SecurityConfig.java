@@ -5,12 +5,20 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import danna.ToDoList.service.CustomUserDetailsService;
+
 @Configuration
 public class SecurityConfig {
+    private final CustomUserDetailsService customUserDetailsService;
 
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService){
+        this.customUserDetailsService = customUserDetailsService;
+    }
+    
     // @Bean -> Esto le dice a visual devuelve un objeto que quiero que Spring gestione como un bean
     // Un bean es básicamente un objeto que Spring crea, inicializa y reutiliza donde se necesite
     @Bean
@@ -32,24 +40,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/user/login", "/api/user/register")
                 .permitAll() // estas rutas se pueden usar sin sesión
                 .anyRequest().authenticated() // todas las demás requieren sesión
-
+            )
+            .userDetailsService(customUserDetailsService)
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             );
-            // .formLogin(form -> form
-            //     .loginProcessingUrl("/api/user/login")
-            //     .successHandler((request, response, authentication) -> {
-            //         response.setContentType("application/json");
-            //         response.getWriter().write("{\"message\":\"Login correcto\"}");
-            //     })
-            //     .failureHandler((request, response, exception) -> {
-            //         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            //         response.setContentType("application/json");
-            //         response.getWriter().write("{\"error\":\"Credenciales incorrectas\"}");
-            //     })
-            // )
-            // .sessionManagement(session -> session
-            //     .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            // );
-
         return http.build();
     }
 }

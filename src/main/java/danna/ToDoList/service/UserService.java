@@ -2,13 +2,17 @@ package danna.ToDoList.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 import danna.ToDoList.dto.UserDto;
@@ -16,12 +20,14 @@ import danna.ToDoList.dto.UserRegisterDto;
 import danna.ToDoList.model.UserEntity;
 import danna.ToDoList.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     // Inyeccion por constructor de dependencias, en lugar de crar una instancia
     public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
@@ -66,17 +72,27 @@ public class UserService {
     //     .orElse(ResponseEntity.status(401).build());
     // }
 
-    
+    // Security context --> Es un objeto que almacena la autentificacion del usuario 
     public ResponseEntity<UserDto> loginUser(UserDto userDto, HttpServletRequest request){
         // Spring valida automaticamente el usuario usando el CustomUserDetailsService
         Authentication auth = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
         );
 
-        // Se guarda la sesion + la cookie JSESSIONID a nivel java, no se crea en el servidor?
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        // fuerza creacion de la sesion HTTP y cookie JSESSIONID
-        request.getSession(true);
+        // Se obtiene el SecurityContext actual para almacenar l ainformacion del usuario autenticado correspodiente
+        // Sin embargo, aun no se guarda en la sesion http
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(auth);
+
+        // Fuerza la creacionn de la sesion si no existe
+        HttpSession session = request.getSession(true);
+        // se guarda el securityContext dentro de la sesion bajo la clave que springboot reconoce
+        // Esto le permite a spring Security: 
+        // 1. Recuperar la sesion por la cookie
+        // 2. Leer el Security Context de la sesion
+        // 3. Recontruir el Authentication real
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, context);
+        
         // Se obtiene el user entity para devolver el dto por seguridad, en caso de no encontrar la entidad lanza una excepcion
         UserEntity userEntity = userRepository.findByUsername(userDto.getUsername())
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -89,7 +105,7 @@ public class UserService {
     // DIFERENCIA ENTRE LIST Y STREAM
     // LIST -> Es una colección de objetos que se almacena directamente en la memoria principal del programa.
     // STREAM -> es una secuencia de procesamiento que opera sobre los datos (que pueden provenir de una lista) de manera eficiente y perezosa, mejorando el rendimiento
-    public List<UserDto> searchUserByUsername(String usernamePart){
+    public List<UserDto> searchUserByUsername(String usernamePart, HttpServletRequest request){
         return userRepository.findByUsernameContainingIgnoreCase(usernamePart)
         // Convieto la lista en un stream de java para poder acceder a sus funciones
         .stream()

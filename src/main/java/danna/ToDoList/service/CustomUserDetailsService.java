@@ -22,11 +22,10 @@ public class CustomUserDetailsService implements UserDetailsService{
     }
 
     @Override
-    // userDetails representa un usuario logeable, no se puede hacer uso de un entity ya que spring security necesita
-    // conocer el rol, username... del usuario, y eso se consigue con UserDetail
+    // Convierte el UserEntity en un UserDetails que Spring Security pueda usar
+    // Contiene username, contraseña hasheada y roles (authorities)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-        // Se busca al usuario para obtener sus datos y devolver un userDetail con los datos de este
-        // y poder guardar la sesion de user con la cookie en UserService
+        // Busca el usuario en la base de datos y lo convierte en un UserDetails que Spring Security pueda usar para autenticar.
         UserEntity userEntity = userRepository.findByUsername(username)
         // si no encuenta el usuario lanza una excepcion
         .orElseThrow(()->new UsernameNotFoundException("User not found"));
