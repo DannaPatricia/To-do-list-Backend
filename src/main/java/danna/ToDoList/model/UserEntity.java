@@ -64,7 +64,7 @@ public class UserEntity {
     // para ello hay que poner el nombre del atributo de la otra entidad que contiene la relación. 
     // Entidad propietario de la relacion: TaskEntity
     @ManyToMany(mappedBy="sharedWith")
-    private List<TaskEntity> sharedTasks;
+    private List<ListEntity> sharedList;
 
     // Constructores
     public UserEntity(){}
@@ -109,10 +109,10 @@ public class UserEntity {
     public List<TagEntity> getTags() {return tags;}
     public void setTags(List<TagEntity> tags) {this.tags = tags;}
 
-    public List<TaskEntity> getSharedTasks() {
-        return sharedTasks;
+    public List<ListEntity> getSharedList() {
+        return sharedList;
     }
-    public void setSharedTasks(List<TaskEntity> sharedTasks) {
-        this.sharedTasks = sharedTasks;
+    public void setSharedList(List<ListEntity> sharedList) {
+        this.sharedList = sharedList;
     }
 }
