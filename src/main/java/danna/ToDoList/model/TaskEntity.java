@@ -76,14 +76,6 @@ public class TaskEntity {
     )
     private List<TagEntity> tags; // Nombre del atributo -> tags
 
-    @ManyToMany
-    @JoinTable(
-        name="task_shared", //Nombre de la tabla intermedia
-        joinColumns= @JoinColumn(name="task_id"), // ESta tabla intermedia apunta al campo task_id que apunta a esta entidad
-        inverseJoinColumns= @JoinColumn(name="user_id") // Esta tabla apunta al campo user_id que hace referencia a la otra entidad UsersEntity
-    )
-    private List<UserEntity> sharedWith; // Nombre del atributo -> sharedWith
-
     // Constructor
     public TaskEntity(){}
 
@@ -126,14 +118,8 @@ public class TaskEntity {
     public List<TagEntity> getTags() {
         return tags;
     }
+
     public void setTags(List<TagEntity> tags) {
         this.tags = tags;
-    }
-
-    public List<UserEntity> getSharedWith() {
-        return sharedWith;
-    }
-    public void setSharedWith(List<UserEntity> sharedWith) {
-        this.sharedWith = sharedWith;
     }
 }

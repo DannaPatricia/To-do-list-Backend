@@ -6,13 +6,13 @@ public class ListDto {
     private Long id;
     private String name;
     private String userName;
-    private List<TaskResponseDto> listTasks;
+    private List<TaskDto> listTasks;
     // de momento esto luego meto de que mande la list de dto de task
     
     public ListDto() {}
     
     // Constructor con todos los campos
-    public ListDto(Long id, String name, String userName, List<TaskResponseDto> listTasks) {
+    public ListDto(Long id, String name, String userName, List<TaskDto> listTasks) {
         this.id = id;
         this.name = name;
         this.userName = userName;
@@ -29,6 +29,6 @@ public class ListDto {
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
 
-    public List<TaskResponseDto> getTaskDtos() { return listTasks; }
-    public void setListTasks(List<TaskResponseDto> listTasks) { this.listTasks = listTasks; }
+    public List<TaskDto> getTaskDtos() { return listTasks; }
+    public void setListTasks(List<TaskDto> listTasks) { this.listTasks = listTasks; }
 }

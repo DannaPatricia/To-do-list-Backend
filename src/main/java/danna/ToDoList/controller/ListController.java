@@ -2,6 +2,7 @@ package danna.ToDoList.controller;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import danna.ToDoList.dto.ListDto;
@@ -16,8 +17,9 @@ public class ListController {
         this.listService = listService;
     }
 
-    @GetMapping
-    public List<ListDto> getAllLists() {
-        return listService.getAllLists();
+    //luego cambiar con verificacion de session
+    @GetMapping("/{userId}")
+    public List<ListDto> getListsByUser(@PathVariable Long userId) {
+        return listService.getListsByUser(userId);
     }
 }
