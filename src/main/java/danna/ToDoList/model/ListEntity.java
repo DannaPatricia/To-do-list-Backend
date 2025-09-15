@@ -13,6 +13,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -42,6 +44,14 @@ public class ListEntity {
     @OneToMany(mappedBy="list")  // mappedBy -> Indica donde esta la relacion en la otra entidad, o sea es el nombre del atributo, list, en TaskEntity
     private List<TaskEntity> tasks; // De esta manera desde la lista se podra acceder a sus tasks
 
+    @ManyToMany
+    @JoinTable(
+        name="list_shared", //Nombre de la tabla intermedia
+        joinColumns= @JoinColumn(name="list_id"), // Esta tabla intermedia apunta al campo list_id que apunta a esta entidad
+        inverseJoinColumns= @JoinColumn(name="user_id") // Esta tabla apunta al campo user_id que hace referencia a la otra entidad UsersEntity
+    )
+    private List<UserEntity> sharedWith; // Nombre del atributo -> sharedWith
+
     // Constructor
     public ListEntity(){}
 
@@ -60,4 +70,12 @@ public class ListEntity {
 
     public List<TaskEntity> getTasks() {return tasks;}
     public void setTasks(List<TaskEntity> tasks) {this.tasks = tasks;}
+
+    public List<UserEntity> getSharedWith() {
+        return sharedWith;
+    }
+
+    public void setSharedWith(List<UserEntity> sharedWith) {
+        this.sharedWith = sharedWith;
+    }
 }
