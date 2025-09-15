@@ -44,13 +44,11 @@ public class UserController {
     }
     
     @GetMapping("/searchUser")
-    public ResponseEntity<List<UserDto>> searchUserByUsername(@RequestParam String namePart, HttpServletRequest request) {
-        List<UserDto> results = userService.searchUserByUsername(namePart, request);
+    public ResponseEntity<List<UserDto>> searchUserByUsername(@RequestParam String namePart) {
+        List<UserDto> results = userService.searchUserByUsername(namePart);
         if(results.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(results);
-    }
-    
-    
+    }    
 }

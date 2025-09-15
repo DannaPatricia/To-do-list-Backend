@@ -9,7 +9,7 @@ import danna.ToDoList.repository.ListRepository;
 import danna.ToDoList.dto.ListDto;
 import danna.ToDoList.model.ListEntity;
 import danna.ToDoList.model.TaskEntity;
-import danna.ToDoList.dto.TaskDto;
+import danna.ToDoList.dto.TaskResponseDto;
 
 @Service
 public class ListService {
@@ -56,12 +56,12 @@ public class ListService {
         );
     }
 
-    private List<TaskDto> covertToDtoTask(List<TaskEntity> entityListTask) {
-    List<TaskDto> listTaskDtos = new ArrayList<>();
+    private List<TaskResponseDto> covertToDtoTask(List<TaskEntity> entityListTask) {
+    List<TaskResponseDto> listTaskDtos = new ArrayList<>();
     
     for (TaskEntity entityTask : entityListTask) {
         // Crear DTO con constructor
-        TaskDto taskDto = new TaskDto(
+        TaskResponseDto taskDto = new TaskResponseDto(
             entityTask.getId(),
             entityTask.getTitle(),
             entityTask.getDescription()

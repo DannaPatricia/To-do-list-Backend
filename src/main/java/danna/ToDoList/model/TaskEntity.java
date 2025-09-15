@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import danna.ToDoList.dto.TaskResponseDetailsDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -85,6 +86,14 @@ public class TaskEntity {
 
     // Constructor
     public TaskEntity(){}
+
+    // Constructor para usar en el TaskService
+    public TaskEntity(TaskResponseDetailsDto taskResponseDetailsDto){
+        this.title = taskResponseDetailsDto.getTitle();
+        this.description = taskResponseDetailsDto.getDescription();
+        this.status = taskResponseDetailsDto.getStatus();
+        this.updatedAt = taskResponseDetailsDto.getUpdatedAt();
+    }
 
     // Getters y Setters
     public Long getId() { return id; }

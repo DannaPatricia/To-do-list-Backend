@@ -1,15 +1,14 @@
 package danna.ToDoList.dto;
 
-public class TaskDto {
+public class TaskResponseDto {
     private Long id;
     private String title;
     private String description;
-    // de momento esto luego meto de que mande la list de dto de task
+
+    public TaskResponseDto() {}
     
-    public TaskDto() {}
-    
-    // Constructor con todos los campos
-    public TaskDto(Long id, String title, String description) {
+    // Constructor con los campos que se usara en el ListService
+    public TaskResponseDto(Long id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;

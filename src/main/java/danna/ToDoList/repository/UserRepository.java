@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import danna.ToDoList.model.UserEntity;
 
@@ -12,6 +13,7 @@ import danna.ToDoList.model.UserEntity;
 // userRepository.findById(1L); → buscar por ID
 // userRepository.findAll(); -> listar todos
 // userRepository.deleteById(2L); → borrar por ID
+@Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long>{
     // ESTRUCTURA DE ESTOS METODOS: Tipo de valor a devolver nombre(tipo nombre)
 

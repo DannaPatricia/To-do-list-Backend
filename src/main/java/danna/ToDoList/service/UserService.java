@@ -33,8 +33,7 @@ public class UserService {
     public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        
+        this.authenticationManager = authenticationManager; 
     }
 
     // Response entity es un objeto que representa toda la respuesta http
@@ -61,17 +60,7 @@ public class UserService {
         return ResponseEntity.status(409).build();
     }
 
-    // Login de usuario
-    // public ResponseEntity<UserDto> loginUser(UserDto userDto){
-    //     return userRepository.findByUsername(userDto.getUsername())
-    //     // Se filtra por el usuario cuya contraseña coincida
-    //     .filter(user -> passwordEncoder.matches(userDto.getPassword(), user.getPassword()))
-    //     // se obtiene el mismo user y se transforma la entidad en dto como respuesta
-    //     .map(user -> ResponseEntity.ok(new UserDto(user)))
-    //     // si no existe el user o la contraseña no coincide se manda un body vacio
-    //     .orElse(ResponseEntity.status(401).build());
-    // }
-
+    // Login de usuario con sesiones
     // Security context --> Es un objeto que almacena la autentificacion del usuario 
     public ResponseEntity<UserDto> loginUser(UserDto userDto, HttpServletRequest request){
         // Spring valida automaticamente el usuario usando el CustomUserDetailsService
@@ -105,7 +94,7 @@ public class UserService {
     // DIFERENCIA ENTRE LIST Y STREAM
     // LIST -> Es una colección de objetos que se almacena directamente en la memoria principal del programa.
     // STREAM -> es una secuencia de procesamiento que opera sobre los datos (que pueden provenir de una lista) de manera eficiente y perezosa, mejorando el rendimiento
-    public List<UserDto> searchUserByUsername(String usernamePart, HttpServletRequest request){
+    public List<UserDto> searchUserByUsername(String usernamePart){
         return userRepository.findByUsernameContainingIgnoreCase(usernamePart)
         // Convieto la lista en un stream de java para poder acceder a sus funciones
         .stream()
