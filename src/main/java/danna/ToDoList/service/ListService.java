@@ -1,14 +1,15 @@
 package danna.ToDoList.service;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
-import danna.ToDoList.repository.ListRepository;
+
 import danna.ToDoList.dto.ListDto;
+import danna.ToDoList.dto.TaskDto;
 import danna.ToDoList.model.ListEntity;
 import danna.ToDoList.model.TaskEntity;
-import danna.ToDoList.dto.TaskDto;
+import danna.ToDoList.repository.ListRepository;
 
 @Service
 public class ListService {

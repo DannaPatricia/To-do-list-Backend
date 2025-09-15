@@ -2,8 +2,6 @@ package danna.ToDoList.dto;
 
 import java.util.List;
 
-import org.springframework.scheduling.config.Task;
-
 public class ListDto {
     private Long id;
     private String name;

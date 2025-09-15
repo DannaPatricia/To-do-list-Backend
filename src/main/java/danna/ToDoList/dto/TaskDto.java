@@ -4,11 +4,10 @@ public class TaskDto {
     private Long id;
     private String title;
     private String description;
-    // de momento esto luego meto de que mande la list de dto de task
-    
+
     public TaskDto() {}
     
-    // Constructor con todos los campos
+    // Constructor con los campos que se usara en el ListService
     public TaskDto(Long id, String title, String description) {
         this.id = id;
         this.title = title;
