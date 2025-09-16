@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import danna.ToDoList.dto.ListDto;
+import danna.ToDoList.dto.ListDto.GetListDto;
 import danna.ToDoList.security.CustomUserDetails;
 import danna.ToDoList.service.ListService;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import danna.ToDoList.dto.ListDto.CreateListDto;
+
 
 @RestController
 @RequestMapping("/api/lists")
@@ -24,7 +30,12 @@ public class ListController {
     // Metodo para obtenern las listas del usuario
     // @AuthenticationPrincipal -> Inyecta usuario autenticado directamente en el parametro del endpoint
     @GetMapping("/me")
-    public ResponseEntity<List<ListDto>> getListsByUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<List<GetListDto>> getListsByUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         return listService.getListsByUser(customUserDetails);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<CreateListDto> crearUsuario(@RequestBody CreateListDto newList) {
+        return listService.createList(newList);
     }
 }

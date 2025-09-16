@@ -1,20 +1,21 @@
-package danna.ToDoList.dto;
+package danna.ToDoList.dto.ListDto;
 
 import java.util.List;
 
+import danna.ToDoList.dto.TaskResponseDetailsDto;
 import danna.ToDoList.model.ListEntity;
 
-public class ListDto {
+public class GetListDto {
     private Long id;
     private String name;
     private String userName;
     private List<TaskResponseDetailsDto> listTasks;
     
     // Constructores
-    public ListDto() {}
+    public GetListDto() {}
 
     // Constructor para pasar de entity a dto
-    public ListDto(ListEntity listEntity) {
+    public GetListDto(ListEntity listEntity) {
         this.id = listEntity.getId();
         this.name = listEntity.getName();
         this.userName = listEntity.getUser().getUsername();
