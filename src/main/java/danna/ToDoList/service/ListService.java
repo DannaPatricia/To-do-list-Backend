@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import danna.ToDoList.dto.ListDto;
 import danna.ToDoList.model.ListEntity;
 import danna.ToDoList.repository.ListRepository;
+import danna.ToDoList.security.CustomUserDetails;
 
 @Service
 public class ListService {
@@ -19,7 +20,9 @@ public class ListService {
     }
 
     // Metodo para obtener todas las listas del usuario, incluidas las compartidas
-    public ResponseEntity<List<ListDto>> getListsByUser(long userId) {
+    public ResponseEntity<List<ListDto>> getListsByUser(CustomUserDetails userDetails) {
+        // Obtenemos el id de la sesion del user
+        long userId = userDetails.getId();
         // obtener todas las listas del user
         List<ListEntity> entities = listRepository.findByUserId(userId);
         // se añaden las listas compartidas a la List de listas del user

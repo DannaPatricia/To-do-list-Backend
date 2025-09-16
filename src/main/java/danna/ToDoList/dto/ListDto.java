@@ -9,7 +9,6 @@ public class ListDto {
     private String name;
     private String userName;
     private List<TaskResponseDetailsDto> listTasks;
-    // de momento esto luego meto de que mande la list de dto de task
     
     // Constructores
     public ListDto() {}
@@ -22,7 +21,6 @@ public class ListDto {
         // Se obtiene la lista de tareas (en dto) mediante su constructor
         this.listTasks = listEntity.getTasks().stream().map(TaskResponseDetailsDto::new).toList();
     }
-    
     
     // Getters y Setters
     public Long getId() { return id; }

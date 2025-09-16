@@ -3,12 +3,13 @@ package danna.ToDoList.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import danna.ToDoList.dto.ListDto;
+import danna.ToDoList.security.CustomUserDetails;
 import danna.ToDoList.service.ListService;
 
 @RestController
@@ -20,9 +21,10 @@ public class ListController {
         this.listService = listService;
     }
 
-    //luego cambiar con verificacion de session
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<ListDto>> getListsByUser(@PathVariable Long userId) {
-        return listService.getListsByUser(userId);
+    // Metodo para obtenern las listas del usuario
+    // @AuthenticationPrincipal -> Inyecta usuario autenticado directamente en el parametro del endpoint
+    @GetMapping("/me")
+    public ResponseEntity<List<ListDto>> getListsByUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return listService.getListsByUser(customUserDetails);
     }
 }
