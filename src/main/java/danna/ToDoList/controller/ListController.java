@@ -2,6 +2,7 @@ package danna.ToDoList.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import danna.ToDoList.dto.ListDto.CreateListDto;
 
-
 @RestController
 @RequestMapping("/api/lists")
 public class ListController {
@@ -28,14 +28,21 @@ public class ListController {
     }
 
     // Metodo para obtenern las listas del usuario
-    // @AuthenticationPrincipal -> Inyecta usuario autenticado directamente en el parametro del endpoint
+    // @AuthenticationPrincipal -> Inyecta usuario autenticado directamente en el
+    // parametro del endpoint
     @GetMapping("/me")
-    public ResponseEntity<List<GetListDto>> getListsByUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<List<GetListDto>> getListsByUser(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         return listService.getListsByUser(customUserDetails);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CreateListDto> crearUsuario(@RequestBody CreateListDto newList) {
-        return listService.createList(newList);
+    public ResponseEntity<CreateListDto> crearUsuario(@RequestBody CreateListDto newList,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (newList == null || newList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+        return listService.createList(newList, customUserDetails.getId());
     }
 }
