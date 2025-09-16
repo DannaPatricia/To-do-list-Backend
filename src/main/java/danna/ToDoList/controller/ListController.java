@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import danna.ToDoList.dto.ListDto;
+import danna.ToDoList.dto.ListDto.CreateListDto;
+import danna.ToDoList.dto.ListDto.GetListDto;
 import danna.ToDoList.service.ListService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api/lists")
@@ -22,7 +26,12 @@ public class ListController {
 
     //luego cambiar con verificacion de session
     @GetMapping("/{userId}")
-    public ResponseEntity<List<ListDto>> getListsByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<GetListDto>> getListsByUser(@PathVariable Long userId) {
         return listService.getListsByUser(userId);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<CreateListDto> crearUsuario(@RequestBody CreateListDto newList) {
+        return listService.createList(newList);
     }
 }
