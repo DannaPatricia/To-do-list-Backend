@@ -50,15 +50,15 @@ public class ListService {
     }
 
     // Metodo para obtener la entidad de usuario mediante el id del post (luego cambiar por la session)
-    public ResponseEntity<CreateListDto> createList(CreateListDto dto) {
+    public ResponseEntity<CreateListDto> createList(CreateListDto dto, Long userId) {
         // Validacion de datos no nulos
         if (dto == null || dto.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         // Buscar el usuario por el id y obtener la entidad
-        UserEntity user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id " + dto.getUserId()));
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id " + userId));
 
         // setear la entidad lista
         ListEntity list = new ListEntity();
