@@ -15,6 +15,7 @@ import danna.ToDoList.model.ListEntity;
 import danna.ToDoList.model.UserEntity;
 import danna.ToDoList.repository.ListRepository;
 import danna.ToDoList.repository.UserRepository;
+import danna.ToDoList.security.CustomUserDetails;
 
 @Service
 public class ListService {
@@ -28,7 +29,9 @@ public class ListService {
     }
 
     // Metodo para obtener todas las listas del usuario, incluidas las compartidas
-    public ResponseEntity<List<GetListDto>> getListsByUser(long userId) {
+    public ResponseEntity<List<GetListDto>> getListsByUser(CustomUserDetails userDetails) {
+        // Obtenemos el id de la sesion del user
+        long userId = userDetails.getId();
         // obtener todas las listas del user
         List<ListEntity> entities = listRepository.findByUserId(userId);
         // se añaden las listas compartidas a la List de listas del user

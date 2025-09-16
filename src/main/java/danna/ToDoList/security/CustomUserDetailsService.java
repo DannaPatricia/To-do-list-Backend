@@ -1,4 +1,4 @@
-package danna.ToDoList.service;
+package danna.ToDoList.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,11 +10,6 @@ import danna.ToDoList.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService{
-    // Contenido de userDetailsService -> 
-    // public interface UserDetailsService {
-    //     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
-    // }
-
     private final UserRepository userRepository;
 
     public CustomUserDetailsService (UserRepository userRepository){
@@ -30,11 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService{
         // si no encuenta el usuario lanza una excepcion
         .orElseThrow(()->new UsernameNotFoundException("User not found"));
 
-        // Devuelve un userDetail con los datos modificados, los datos del user que se logea
-        return org.springframework.security.core.userdetails.User.builder()
-        .username(userEntity.getUsername())
-        .password(userEntity.getPassword()) // contraseña ya hasheada
-        .roles("USER") // roles fijos por ahora
-        .build();
+        // Crea una clase CustomUserDetails que implementa UserDetails, le paso el UserEntity por constructor
+        return new CustomUserDetails(userEntity);
     }
 }
