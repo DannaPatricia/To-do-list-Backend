@@ -41,7 +41,9 @@ public class SecurityConfig {
                 .permitAll() // estas rutas se pueden usar sin sesión
                 .anyRequest().authenticated() // todas las demás requieren sesión
             )
+            // Se señala la clase que utiliza la interfaz UserDetailsService para el Spring Security
             .userDetailsService(customUserDetailsService)
+            // se crea obligatoriamente la sesion s es necesario
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             );

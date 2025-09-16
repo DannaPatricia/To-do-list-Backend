@@ -2,22 +2,27 @@ package danna.ToDoList.dto;
 
 import java.util.List;
 
+import danna.ToDoList.model.ListEntity;
+
 public class ListDto {
     private Long id;
     private String name;
     private String userName;
-    private List<TaskDto> listTasks;
+    private List<TaskResponseDetailsDto> listTasks;
     // de momento esto luego meto de que mande la list de dto de task
     
+    // Constructores
     public ListDto() {}
-    
-    // Constructor con todos los campos
-    public ListDto(Long id, String name, String userName, List<TaskDto> listTasks) {
-        this.id = id;
-        this.name = name;
-        this.userName = userName;
-        this.listTasks = listTasks;
+
+    // Constructor para pasar de entity a dto
+    public ListDto(ListEntity listEntity) {
+        this.id = listEntity.getId();
+        this.name = listEntity.getName();
+        this.userName = listEntity.getUser().getUsername();
+        // Se obtiene la lista de tareas (en dto) mediante su constructor
+        this.listTasks = listEntity.getTasks().stream().map(TaskResponseDetailsDto::new).toList();
     }
+    
     
     // Getters y Setters
     public Long getId() { return id; }
@@ -29,6 +34,6 @@ public class ListDto {
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
 
-    public List<TaskDto> getTaskDtos() { return listTasks; }
-    public void setListTasks(List<TaskDto> listTasks) { this.listTasks = listTasks; }
+    public List<TaskResponseDetailsDto> getTaskDtos() { return listTasks; }
+    public void setListTasks(List<TaskResponseDetailsDto> listTasks) { this.listTasks = listTasks; }
 }
