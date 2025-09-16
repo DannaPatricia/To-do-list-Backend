@@ -11,10 +11,10 @@ public class TaskResponseDetailsDto {
     private TaskStatus status;
     private LocalDateTime updatedAt;
 
+    // Constructores
     public TaskResponseDetailsDto() {}
     
-
-    // Constructor con los campos que se usara en el TaskService
+    // Constructor con los campos que se usara en el TaskService y el ListService
     public TaskResponseDetailsDto(TaskEntity taskEntity) {
         this.title = taskEntity.getTitle();
         this.description = taskEntity.getDescription();
