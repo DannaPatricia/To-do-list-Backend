@@ -62,9 +62,7 @@ public class ListService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id " + userId));
 
         // setear la entidad lista
-        ListEntity list = new ListEntity();
-        list.setName(dto.getName());
-        list.setUser(user);
+        ListEntity list = new ListEntity(dto.getName(), user);
 
         // guardarla en la base de datos
         list = listRepository.save(list);
