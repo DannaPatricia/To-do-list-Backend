@@ -25,6 +25,7 @@ public class TaskService {
         this.listRepository = listRepository;
     }
 
+    // Metodo para obtener los detalles de la tarea seleccionada
     public ResponseEntity<TaskResponseDetailsDto> getTasksDetailsById(Long taskId){
         // Obtengo el entity del task con el repository
         return taskRespository.findById(taskId)
@@ -33,6 +34,7 @@ public class TaskService {
         .orElse(ResponseEntity.notFound().build());
     }
 
+    // Metodo para crear una tarea, se le pasa por parameto el id de la lista
     public ResponseEntity<TaskResponseDetailsDto> createTask(TaskRequestDto taskDto, Long listId, Long userId){
         // Validacion de datos no nulos (titulo de la task)
         if (taskDto == null || taskDto.isEmpty()) {
@@ -60,4 +62,8 @@ public class TaskService {
         // Se retorna el task creado en dto
         return ResponseEntity.ok(new TaskResponseDetailsDto(taskRespository.save(taskEntity)));
     }
+
+    // public ResponseEntity<TaskResponseDetailsDto> updateTask(Task){
+
+    // }
 }
