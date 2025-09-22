@@ -2,12 +2,12 @@ package danna.ToDoList.dto.ListDto;
 
 import danna.ToDoList.model.ListEntity;
 
-public class CreateListDto {
+public class ListDto {
     private String name;
 
-    public CreateListDto() {}
+    public ListDto() {}
 
-    public CreateListDto(ListEntity listEntity) {
+    public ListDto(ListEntity listEntity) {
         this.name = listEntity.getName();
     }
 
