@@ -80,8 +80,13 @@ public class ListEntity {
     public List<UserEntity> getSharedWith() {
         return sharedWith;
     }
-
     public void setSharedWith(List<UserEntity> sharedWith) {
         this.sharedWith = sharedWith;
+    }
+
+    // Se comprueba si la list ha sido compartida con el usuario
+    public boolean isSharedWith(Long userId) {
+        return sharedWith.stream()
+            .anyMatch(user -> user.getId().equals(userId));
     }
 }
