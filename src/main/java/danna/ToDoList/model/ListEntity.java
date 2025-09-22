@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import danna.ToDoList.dto.ListDto.CreateListDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -54,8 +53,14 @@ public class ListEntity {
     private List<UserEntity> sharedWith; // Nombre del atributo -> sharedWith
 
     // Constructor para crear una lista
-    public ListEntity() {}
+    public ListEntity(String name, UserEntity user) {
+        this.name = name;
+        this.user = user;
+    }
     
+    // Constructor vacio para jpa
+    public ListEntity() {}
+
     // Getter y Setters
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}

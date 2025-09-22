@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 // DTOs
 import danna.ToDoList.dto.ListDto.GetListDto;
 import danna.ToDoList.dto.ListDto.ShareListDto;
-import danna.ToDoList.dto.ListDto.CreateListDto;
+import danna.ToDoList.dto.ListDto.ListDto;
 
 // Serviucios y seguridad
 import danna.ToDoList.security.CustomUserDetails;
@@ -21,6 +21,8 @@ import danna.ToDoList.service.ListService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/lists")
@@ -40,18 +42,42 @@ public class ListController {
         return listService.getListsByUser(customUserDetails);
     }
 
+    // Crear una nueva lista
+    // El id del usuario se obtiene de la sesion
     @PostMapping("/create")
-    public ResponseEntity<CreateListDto> createList(@RequestBody CreateListDto newList,
+    public ResponseEntity<ListDto> createList(@RequestBody ListDto newList,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (newList == null || newList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-
         return listService.createList(newList, customUserDetails.getId());
     }
 
-    // Metodo para compartir una lista ya creada busncando el usuario y la lista por el id
-    // recordatorio meter algo para no insertar varias veces el mismo usuario en la misma lista
+    // Actualizar el nombre de una lista
+    @PutMapping("/update/{listId}")
+    public ResponseEntity<String> updateList(@PathVariable Long listId, @RequestBody ListDto updateList,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (updateList == null || updateList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return listService.updateList(listId, updateList.getName(), customUserDetails.getId());
+    }
+
+    // Eliminar una lista
+    // Recordar poner dos botoness en el fronted para preguntar si eliminar
+    @DeleteMapping("/delete/{listId}")
+    public ResponseEntity<String> deleteList(@PathVariable Long listId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (listId == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return listService.deleteList(listId, customUserDetails.getId());
+    }
+
+    // Metodo para compartir una lista ya creada busncando el usuario y la lista por
+    // el id
+    // recordatorio meter algo para no insertar varias veces el mismo usuario en la
+    // misma lista
     @PostMapping("/share")
     public ResponseEntity<Void> createShareList(@RequestBody ShareListDto newShareList,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
