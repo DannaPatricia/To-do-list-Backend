@@ -9,7 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import danna.ToDoList.dto.TaskResponseDetailsDto;
+import danna.ToDoList.dto.TaskRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -44,7 +44,7 @@ public class TaskEntity {
     
     @Enumerated(EnumType.STRING) // Esto le permite a la BD que guarde una de las constantes declaradas en el ENUM, STRING indica que guardara el nombre, no de la posicion de la costante como con ORDINAL
     @Column(nullable = false) // Valida a nivel de BD que no sea NULL
-    private TaskStatus status;
+    private TaskStatus status = TaskStatus.PENDING;
 
     @NotNull
     @Column(name = "due_date")
@@ -79,12 +79,11 @@ public class TaskEntity {
     // Constructor
     public TaskEntity(){}
 
-    // Constructor para usar en el TaskService
-    public TaskEntity(TaskResponseDetailsDto taskResponseDetailsDto){
-        this.title = taskResponseDetailsDto.getTitle();
-        this.description = taskResponseDetailsDto.getDescription();
-        this.status = taskResponseDetailsDto.getStatus();
-        this.updatedAt = taskResponseDetailsDto.getUpdatedAt();
+    // Consatuctor para pasar de Dto a entidad
+    public TaskEntity(TaskRequestDto taskRequestDto){
+        this.title = taskRequestDto.getTitle();
+        this.description = taskRequestDto.getDescription();
+        this.dueDate = taskRequestDto.getDueDate();
     }
 
     // Getters y Setters
@@ -118,7 +117,6 @@ public class TaskEntity {
     public List<TagEntity> getTags() {
         return tags;
     }
-
     public void setTags(List<TagEntity> tags) {
         this.tags = tags;
     }
