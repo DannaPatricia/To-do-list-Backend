@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import danna.ToDoList.dto.ListDto.CreateListDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -75,8 +74,13 @@ public class ListEntity {
     public List<UserEntity> getSharedWith() {
         return sharedWith;
     }
-
     public void setSharedWith(List<UserEntity> sharedWith) {
         this.sharedWith = sharedWith;
+    }
+
+    // Se comprueba si la list ha sido compartida con el usuario
+    public boolean isSharedWith(Long userId) {
+        return sharedWith.stream()
+            .anyMatch(user -> user.getId().equals(userId));
     }
 }
