@@ -48,6 +48,11 @@ public class TagEntity {
     // Constructor
     public TagEntity(){}
 
+    public TagEntity(String name, UserEntity userEntity){
+        this.name = name;
+        this.user = userEntity;
+    }
+
     // Getters y Setters
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
