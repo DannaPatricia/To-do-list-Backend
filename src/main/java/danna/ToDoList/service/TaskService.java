@@ -36,34 +36,44 @@ public class TaskService {
 
     // Metodo para crear una tarea, se le pasa por parameto el id de la lista
     public ResponseEntity<TaskResponseDetailsDto> createTask(TaskRequestDto taskDto, Long listId, Long userId){
-        // Validacion de datos no nulos (titulo de la task)
-        if (taskDto == null || taskDto.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+        try{
+            // Validacion de datos no nulos (titulo de la task)
+            if (taskDto == null || taskDto.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
 
-        // Obtencion del entity de la lista para poder almacenar la task en la lista deseada
-        ListEntity listEntity = listRepository.findById(listId).
-            orElseThrow(() -> new RuntimeException("Lista no encontrada: " + listId));
+            // Obtencion del entity de la lista para poder almacenar la task en la lista deseada
+            ListEntity listEntity = getAndValidateList(listId, userId);
 
-        // Validar que esta lista es del usuario o le ha sido compartida
-        if (!listEntity.getUser().getId().equals(userId) && !listEntity.isSharedWith(userId)) {
+            // Obtencion del entity del user para almacenarlo en la base de datos junto a la task
+            UserEntity userEntity = userRepository.findById(userId).
+                orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + userId));
+
+            // Se pasa la taskDto a entity para almacenarlo en la lista, y se modifican el id de lista y el user
+            TaskEntity taskEntity = new TaskEntity(taskDto);
+            taskEntity.setUser(userEntity);
+            taskEntity.setList(listEntity);
+
+            // Se retorna el task creado en dto
+            return ResponseEntity.ok(new TaskResponseDetailsDto(taskRespository.save(taskEntity)));
+        } catch (SecurityException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
-        // Obtencion del entity del user para almacenarlo en la base de datos junto a la task
-        UserEntity userEntity = userRepository.findById(userId).
-            orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + userId));
-
-        // Se pasa la taskDto a entity para almacenarlo en la lista, y se modifican el id de lista y el user
-        TaskEntity taskEntity = new TaskEntity(taskDto);
-        taskEntity.setUser(userEntity);
-        taskEntity.setList(listEntity);
-
-        // Se retorna el task creado en dto
-        return ResponseEntity.ok(new TaskResponseDetailsDto(taskRespository.save(taskEntity)));
     }
 
-    // public ResponseEntity<TaskResponseDetailsDto> updateTask(Task){
+    // public ResponseEntity<TaskResponseDetailsDto> updateTask(TaskRequestDto taskDto, Long listId, Long TaskId, Long userId){
 
     // }
+
+    // Metodo que devuelve la listEntity  si la lista le fue compartida al user o es suya
+    private ListEntity getAndValidateList(Long listId, Long userId) {
+        ListEntity listEntity = listRepository.findById(listId)
+                .orElseThrow(() -> new RuntimeException("Lista no encontrada con id " + listId));
+        // Validar que el usuario que accede es el dueño de la lista o le ha sido compartida
+        if (!listEntity.getUser().getId().equals(userId) && !listEntity.isSharedWith(userId)) {
+            throw new SecurityException("No tienes permiso para esta lista");
+        }
+        // Enviar la lista validada para su uso
+        return listEntity;
+    }
 }
