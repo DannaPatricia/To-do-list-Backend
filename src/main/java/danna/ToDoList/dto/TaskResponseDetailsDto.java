@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import danna.ToDoList.model.TagEntity;
 import danna.ToDoList.model.TaskEntity;
 import danna.ToDoList.model.TaskStatus;
 
@@ -25,8 +27,12 @@ public class TaskResponseDetailsDto {
         this.title = taskEntity.getTitle();
         this.description = taskEntity.getDescription();
         this.status = taskEntity.getStatus();
-        // this.tags = taskEntity.getTags().stream().map(TagEntity::getName).toList();
-        this.tags = new ArrayList<>();
+        // Se verifica si la lista de tags esta vacia, si es el caso se asigna una vacia, sino la pasada por la entidad
+        // RECORDATORIO, EL .toList() CREA UAN LISTA INMUTABLE, NO SE PODRA MODIFICAR, POR TANTO LO MEJOR ES USARLO SOLO 
+        // PARA DEVOLVERLO JUNTO AL RESPONSENTITY
+        this.tags = (taskEntity.getTags() != null && !taskEntity.getTags().isEmpty())
+            ? taskEntity.getTags().stream().map(TagEntity::getName).collect(Collectors.toList())
+            : new ArrayList<>();
         this.updatedAt = taskEntity.getUpdatedAt();
         this.dueDate = taskEntity.getDueDate();
         this.userName = taskEntity.getUser().getUsername();

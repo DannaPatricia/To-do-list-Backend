@@ -2,6 +2,7 @@ package danna.ToDoList.dto;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import danna.ToDoList.model.TagEntity;
 import danna.ToDoList.model.TaskEntity;
@@ -13,7 +14,6 @@ public class TaskUpdateDto {
     private TaskStatus status;
     private List<String> tags;
     private LocalDate dueDate;
-    private String userName;
 
     // Constructores
     public TaskUpdateDto() {}
@@ -23,9 +23,10 @@ public class TaskUpdateDto {
         this.title = taskEntity.getTitle();
         this.description = taskEntity.getDescription();
         this.status = taskEntity.getStatus();
-        this.tags = taskEntity.getTags().stream().map(TagEntity::getName).toList();
+        // RECORDATORIO, EL .toList() CREA UNA LISTA INMUTABLE, NO SE PODRA MODIFICAR, POR TANTO LO MEJOR ES USARLO SOLO 
+        // PARA DEVOLVERLO JUNTO AL RESPONSENTITY
+        this.tags = taskEntity.getTags().stream().map(TagEntity::getName).collect(Collectors.toList());
         this.dueDate = taskEntity.getDueDate();
-        this.userName = taskEntity.getUser().getUsername();
     }
 
     // Getters y Setters
@@ -44,10 +45,8 @@ public class TaskUpdateDto {
     public List<String> getTags() {return tags;}
     public void setTags(List<String> tags) {this.tags = tags;}
 
-    public String getUserName() {
-        return userName;
-    }
-    public void setUserName(String userName) {
-        this.userName = userName;
+    // Metodos de validacion
+    public boolean isEmpty() {
+        return title == null || title.trim().isEmpty();
     }
 }
