@@ -78,7 +78,7 @@ public class TaskService {
                 orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + userId));
 
             // Se valida si la lista (donde esta guardada la tarea) le pertenece al usuario o le ha sido compartida
-            ListEntity listEntity = getAndValidateList(taskEntity.getList().getId(), userId);
+            getAndValidateList(taskEntity.getList().getId(), userId);
 
             // Obtencion del entity del user para poder obtener las tags mediante el nombre de las tags y el userID
             UserEntity userEntity = userRepository.findById(userId).
@@ -110,6 +110,14 @@ public class TaskService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
+    // public ResponseEntity<String> deleteTask(Long taskId){
+    //     try{
+
+    //     }catch(SecurityException e){
+    //         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+    //     }
+    // }
 
     // Metodo que devuelve la listEntity  si la lista le fue compartida al user o es suya
     private ListEntity getAndValidateList(Long listId, Long userId) {

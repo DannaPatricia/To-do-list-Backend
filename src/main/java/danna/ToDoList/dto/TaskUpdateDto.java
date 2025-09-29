@@ -23,7 +23,7 @@ public class TaskUpdateDto {
         this.title = taskEntity.getTitle();
         this.description = taskEntity.getDescription();
         this.status = taskEntity.getStatus();
-        // RECORDATORIO, EL .toList() CREA UAN LISTA INMUTABLE, NO SE PODRA MODIFICAR, POR TANTO LO MEJOR ES USARLO SOLO 
+        // RECORDATORIO, EL .toList() CREA UNA LISTA INMUTABLE, NO SE PODRA MODIFICAR, POR TANTO LO MEJOR ES USARLO SOLO 
         // PARA DEVOLVERLO JUNTO AL RESPONSENTITY
         this.tags = taskEntity.getTags().stream().map(TagEntity::getName).collect(Collectors.toList());
         this.dueDate = taskEntity.getDueDate();
