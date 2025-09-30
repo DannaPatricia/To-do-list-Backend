@@ -3,6 +3,9 @@ package danna.ToDoList.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+// Permitir acceso
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +18,8 @@ import danna.ToDoList.dto.UserRegisterDto;
 import danna.ToDoList.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
+// para permitir Angular
+@CrossOrigin(origins = "http://localhost:4200")
 
 @RestController
 @RequestMapping("api/user")
