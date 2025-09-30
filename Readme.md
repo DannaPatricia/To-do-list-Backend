@@ -69,6 +69,9 @@ Crear una base de datos PostgreSQL:
 CREATE DATABASE todolist_db;
 ```
 
+Instalacion de la base de datos
+- Importar la base de datos de nuestro **[archivo](./BackupDB/To-Do-List-DB.sql)**
+
 Configurar las credenciales en `src/main/resources/application.properties`:
 
 ```properties
@@ -146,19 +149,18 @@ Importa la colección completa de endpoints: **[ToDoList.postman_collection.json
 ```
 src/
 ├── main/
-│   ├── java/com/todolist/api/
-│   │   ├── config/           # Configuraciones de Spring
-│   │   ├── controller/       # Controladores REST
-│   │   ├── dto/              # Data Transfer Objects
-│   │   ├── model/            # Entidades JPA
-│   │   ├── repository/       # Repositorios de datos
-│   │   ├── security/         # Configuración de seguridad
-│   │   └── service/          # Lógica de negocio
-│   └── resources/
-│       ├── application.properties        # Configuración principal
-│       └── application-dev.properties    # Configuración desarrollo
-└── test/
-    └── java/                 # Tests unitarios e integración
+   ├── java/com/todolist/api/
+   │   ├── config/           # Configuraciones de Spring
+   │   ├── controller/       # Controladores REST
+   │   ├── dto/              # Data Transfer Objects
+   │   ├── model/            # Entidades JPA
+   │   ├── repository/       # Repositorios de datos
+   │   ├── security/         # Configuración de seguridad
+   │   └── service/          # Lógica de negocio
+   └── resources/
+       ├── application.properties        # Configuración principal
+       └── application-dev.properties    # Configuración desarrollo
+
 ```
 
 ---
@@ -239,8 +241,6 @@ erDiagram
 - Si se elimina una **tarea**: Se eliminan todas sus asociaciones con tags
 - Si se elimina un **tag**: Se eliminan todas sus asociaciones con tareas
 
-** Instalacion de la base de datos **
-- Importar la base de datos de nuestro **[archivo](./BackupDB/To-Do-List-DB.sql)**
 ---
 
 ## 💡 Notas Técnicas
@@ -267,10 +267,6 @@ La API utiliza **JWT (JSON Web Tokens)** para la autenticación:
 
 1. **Registro**: Crea una cuenta en `/api/user/register`
 2. **Login**: Obtén tu token en `/api/user/login`
-3. **Uso**: Incluye el token en el header de tus peticiones:
-   ```
-   Authorization: Bearer {tu-token-jwt}
-   ```
 
 ---
 
@@ -293,16 +289,14 @@ La API implementa:
     <td align="center">
       <a href="https://github.com/DannaPatricia">
         <img src="https://github.com/DannaPatricia.png" width="100px;" alt="Danna Patricia Collaguazo Mera"/><br />
-        <sub><b>Danna Patricia Mera</b></sub>
+        <sub><b>Danna Patricia Collaguazo Mera</b></sub>
       </a><br />
-      <sub>Backend & Database</sub>
     </td>
       <td align="center">
       <a href="https://github.com/sam324sam">
         <img src="https://github.com/sam324sam.png" width="100px;" alt="Samuel Moniz Pereira"/><br />
-        <sub><b>Samuel Moniz</b></sub>
+        <sub><b>Samuel Moniz Pereira</b></sub>
       </a><br />
-      <sub>Frontend & Backend</sub>
     </td>
   </tr>
 </table>
