@@ -3,8 +3,6 @@ package danna.ToDoList.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-// Permitir acceso
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,16 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import danna.ToDoList.dto.UserDto;
 import danna.ToDoList.dto.UserRegisterDto;
+import danna.ToDoList.dto.ErrorsDto.ErrorResponseDto;
 import danna.ToDoList.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
-// para permitir Angular
-@CrossOrigin(origins = "http://localhost:4200")
-
 @RestController
 @RequestMapping("api/user")
-// @CrossOrigin(origins = "http://localhost:4200") // para permitir Angular más adelante
-
+// para permitir Angular
 // Controlador, hara uso del service se usuarios para controlar qu elogica implementar dependiendo de la llamada
 public class UserController {
     private final UserService userService;
@@ -35,7 +30,7 @@ public class UserController {
 
     // Meotdo para registar un usuario
     @PostMapping("/register")
-    public ResponseEntity<UserRegisterDto> createUser(@RequestBody UserRegisterDto newUserDto) {
+    public ResponseEntity<ErrorResponseDto> createUser(@RequestBody UserRegisterDto newUserDto) {
         return userService.createUser(newUserDto);
     }
 
@@ -55,5 +50,11 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(results);
-    }    
+    }
+
+    // Desloguear al usuario
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        return userService.logout(request);
+    }
 }
