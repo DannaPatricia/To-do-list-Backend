@@ -10,10 +10,14 @@ public class UserDto {
     @NotBlank
     private String password;
 
+    // Para el frontend
+    private Long id;
+
     // Constructores
     public UserDto(){}
     public UserDto(UserEntity entity){
         this.username = entity.getUsername();
+        this.id = entity.getId();
     }
 
     // Getters y Setters
@@ -22,4 +26,7 @@ public class UserDto {
 
     public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
+
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
 }

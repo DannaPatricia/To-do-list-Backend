@@ -15,7 +15,6 @@ import danna.ToDoList.model.ListEntity;
 import danna.ToDoList.model.UserEntity;
 import danna.ToDoList.repository.ListRepository;
 import danna.ToDoList.repository.UserRepository;
-import danna.ToDoList.security.CustomUserDetails;
 
 @Service
 public class ListService {
@@ -71,7 +70,7 @@ public class ListService {
 
     // metodo para actualizar el nombre de una lista ( solo el nombre ya e revisa
     // antes para que no este vacio ni nulo)
-    public ResponseEntity<String> updateList(Long listId, String newName, Long userId) {
+    public ResponseEntity<Void> updateList(Long listId, String newName, Long userId) {
         try {
             // Buscar la lista por el id y obtener la entidad
             ListEntity listToUpdate = getAndValidateList(listId, userId);
@@ -79,22 +78,22 @@ public class ListService {
             listToUpdate.setName(newName);
             // Guardar los cambios
             listRepository.save(listToUpdate);
-            return ResponseEntity.ok("Lista actualizada correctamente");
+            return ResponseEntity.ok().build();
         } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
     // Metodo para eliminar una lista mediate su id
-    public ResponseEntity<String> deleteList(Long listId, Long userId) {
+    public ResponseEntity<Void> deleteList(Long listId, Long userId) {
         try {
             // Buscar la lista por el id y obtener la entidad
             ListEntity listToDelete = getAndValidateList(listId, userId);
             // Eliminar la lista
             listRepository.delete(listToDelete);
-            return ResponseEntity.ok("Lista eliminada correctamente");
+            return ResponseEntity.ok().build();
         } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     } 
 

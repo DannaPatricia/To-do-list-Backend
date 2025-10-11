@@ -55,7 +55,7 @@ public class ListController {
 
     // Actualizar el nombre de una lista
     @PutMapping("/update/{listId}")
-    public ResponseEntity<String> updateList(@PathVariable Long listId, @RequestBody ListDto updateList,
+    public ResponseEntity<Void> updateList(@PathVariable Long listId, @RequestBody ListDto updateList,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (updateList == null || updateList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -66,7 +66,7 @@ public class ListController {
     // Eliminar una lista
     // Recordar poner dos botoness en el fronted para preguntar si eliminar
     @DeleteMapping("/delete/{listId}")
-    public ResponseEntity<String> deleteList(@PathVariable Long listId,
+    public ResponseEntity<Void> deleteList(@PathVariable Long listId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (listId == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
