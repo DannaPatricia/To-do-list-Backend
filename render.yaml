@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: to-do-list-backend
+    env: java
+    buildCommand: "./mvnw clean package -DskipTests"
+    startCommand: "java -jar target/To-do-list-Backend-0.0.1-SNAPSHOT.jar"
+    plan: free
