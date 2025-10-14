@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional;
 
 // DTos
 import danna.ToDoList.dto.ListDto.ListDto;
@@ -28,6 +29,8 @@ public class ListService {
     }
 
     // Metodo para obtener todas las listas del usuario, incluidas las compartidas
+    // Para quitar error de la carga de lasesion y que no me de error al momento de verr las task en el
+    @Transactional 
     public ResponseEntity<List<GetListDto>> getListsByUser(Long userId) {
         // obtener todas las listas del user
         List<ListEntity> entities = listRepository.findByUserId(userId);

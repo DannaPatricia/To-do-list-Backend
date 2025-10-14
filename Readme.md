@@ -70,7 +70,10 @@ CREATE DATABASE todolist_db;
 ```
 
 Instalacion de la base de datos
-- Importar la base de datos de nuestro **[archivo](./BackupDB/To-Do-List-DB.sql)**
+- Importar la base de datos de nuestro **[archivo](./BackupDB/To-Do-List-DB.sql)**. Y luego ejecutar el comando en psql 
+```psql
+\i "Donder ser descarge el archivo"'
+```
 
 Configurar las credenciales en `src/main/resources/application.properties`:
 
