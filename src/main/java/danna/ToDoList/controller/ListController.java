@@ -96,4 +96,14 @@ public class ListController {
         }
         return listService.unshareList(shareListDto, customUserDetails.getId());
     }
+
+    // Eliminar el compartir una lista conmigo (Cambia el id del user sea suyo)
+    @DeleteMapping("/share-me")
+    public ResponseEntity<Void> deleteShare(@RequestBody Long listId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (listId == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return listService.deleteShareMe(listId, customUserDetails.getId());
+    }
 }

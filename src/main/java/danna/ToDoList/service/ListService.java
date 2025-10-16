@@ -102,6 +102,7 @@ public class ListService {
 
     // Metodo para compartir una lista ya creada busncando el usuario y la lista por
     // el id
+    @Transactional
     public ResponseEntity<Void> createShareList(ShareListDto dto, Long userId) {
         try {
             // Buscar el usuario con quien se va a compartir
@@ -126,6 +127,8 @@ public class ListService {
     }
 
     // metodo para descompartir una lista ( no se si eso es un verbo )
+    // el trancional es para que no de error de carga perezosa
+    @Transactional
     public ResponseEntity<Void> unshareList(ShareListDto dto, Long userId) {
         try {
             // Buscar el usuario al que se va a quitar de la lista
@@ -140,6 +143,32 @@ public class ListService {
 
             // Spring JPA detecta el cambio en la relación y actualiza la tabla intermedia
             listRepository.save(listToUnshare);
+
+            return ResponseEntity.ok().build();
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    // Metodo para quitar una lista compartida conmigo
+    // el trancional es para que no de error de carga perezosa
+    @Transactional
+    public ResponseEntity<Void> deleteShareMe(Long listId, Long userId) {
+        try {
+            // Buscar el usuario que quiere dejar de ver la lista
+            UserEntity currentUser = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id " + userId));
+
+            // Buscar la lista que se quiere dejar de ver
+            ListEntity listToLeave = listRepository.findById(listId)
+                    .orElseThrow(() -> new RuntimeException("Lista no encontrada con id " + listId));
+
+            // Remover al usuario de la lista de compartidos
+            listToLeave.getSharedWith().remove(currentUser);
+
+            // Guardar cambios -> JPA detecta la relacion modificada y actualiza la tabla
+            // intermedia
+            listRepository.save(listToLeave);
 
             return ResponseEntity.ok().build();
         } catch (SecurityException e) {

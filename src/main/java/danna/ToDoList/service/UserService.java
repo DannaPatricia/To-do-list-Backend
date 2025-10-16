@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -107,7 +109,8 @@ public class UserService {
         // 2. Leer el Security Context de la sesion
         // 3. Recontruir el Authentication real
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, context);
-
+        session.setAttribute("user", userDto.getUsername());
+        session.setAttribute("id", userDto.getId());
         // Se obtiene el user entity para devolver el dto por seguridad, en caso de no
         // encontrar la entidad lanza una excepcion
         UserEntity userEntity = userRepository.findByUsername(userDto.getUsername())
@@ -139,5 +142,17 @@ public class UserService {
     public ResponseEntity<Void> logout(HttpServletRequest request) {
         request.getSession().invalidate(); // destruye la sesion en el servidor
         return ResponseEntity.ok().build();
+    }
+
+    // Para verificar el estado de la sesion en con el frontend
+    public ResponseEntity<UserDto> checkSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("user") != null) {
+            UserDto userDto = new UserDto();
+            userDto.setUsername((String) session.getAttribute("user"));
+            userDto.setId((Long) session.getAttribute("id"));
+            return ResponseEntity.ok(userDto);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

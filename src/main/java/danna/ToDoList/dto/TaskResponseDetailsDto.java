@@ -11,6 +11,7 @@ import danna.ToDoList.model.TaskEntity;
 import danna.ToDoList.model.TaskStatus;
 
 public class TaskResponseDetailsDto {
+    private Long id;
     private String title;
     private String description;
     private TaskStatus status;
@@ -24,6 +25,7 @@ public class TaskResponseDetailsDto {
     
     // Constructor con los campos que se usara en el TaskService y el ListService
     public TaskResponseDetailsDto(TaskEntity taskEntity) {
+        this.id = taskEntity.getId();
         this.title = taskEntity.getTitle();
         this.description = taskEntity.getDescription();
         this.status = taskEntity.getStatus();
@@ -39,6 +41,9 @@ public class TaskResponseDetailsDto {
     }
 
     // Getters y Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     

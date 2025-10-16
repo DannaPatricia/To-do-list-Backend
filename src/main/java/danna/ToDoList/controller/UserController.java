@@ -52,6 +52,12 @@ public class UserController {
         return ResponseEntity.ok(results);
     }
 
+    // Metodo para verificar si hay una sesion activa
+    @GetMapping("/check-session")
+    public ResponseEntity<UserDto> checkSession(HttpServletRequest request) {
+        return userService.checkSession(request);
+    }
+
     // Desloguear al usuario
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
