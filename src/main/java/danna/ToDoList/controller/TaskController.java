@@ -1,5 +1,7 @@
 package danna.ToDoList.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,6 +37,13 @@ public class TaskController {
     @GetMapping("/{taskId}")
     public ResponseEntity<TaskResponseDetailsDto> getTasksDetailsById(@PathVariable Long taskId) {
         return taskService.getTasksDetailsById(taskId);
+    }
+
+    // Para obtener todas las tareas de una lista
+    @GetMapping("/list/{listId}")
+    public ResponseEntity<List<TaskResponseDetailsDto>> getTasksByListId(@PathVariable Long listId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return taskService.getTasksByListId(listId, customUserDetails.getId());
     }
 
     // Crear una tarea mediante el id de la lista
