@@ -17,6 +17,7 @@ import danna.ToDoList.repository.ListRepository;
 import danna.ToDoList.repository.TagRepository;
 import danna.ToDoList.repository.TaskRespository;
 import danna.ToDoList.repository.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class TaskService {
@@ -42,7 +43,8 @@ public class TaskService {
                 .map(task -> ResponseEntity.ok(new TaskResponseDetailsDto(task)))
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    // Obtener las tareas de una lista mediante su id
+    @Transactional 
     public ResponseEntity<List<TaskResponseDetailsDto>> getTasksByListId(Long listId, Long userId) {
         try {
             // Validar que la lista le pertenece al usuario o le ha sido compartida
