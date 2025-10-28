@@ -1,14 +1,15 @@
 package danna.ToDoList.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import danna.ToDoList.dto.TaskRequestDto;
-import danna.ToDoList.dto.TaskResponseDetailsDto;
-import danna.ToDoList.dto.TaskUpdateDto;
+import danna.ToDoList.dto.Task.TaskRequestDto;
+import danna.ToDoList.dto.Task.TaskResponseDetailsDto;
+import danna.ToDoList.dto.Task.TaskUpdateDto;
 import danna.ToDoList.model.ListEntity;
 import danna.ToDoList.model.TagEntity;
 import danna.ToDoList.model.TaskEntity;
@@ -36,6 +37,7 @@ public class TaskService {
     }
 
     // Metodo para obtener los detalles de la tarea seleccionada
+    @Transactional
     public ResponseEntity<TaskResponseDetailsDto> getTasksDetailsById(Long taskId) {
         // Obtengo el entity del task con el repository
         return taskRespository.findById(taskId)
@@ -43,8 +45,9 @@ public class TaskService {
                 .map(task -> ResponseEntity.ok(new TaskResponseDetailsDto(task)))
                 .orElse(ResponseEntity.notFound().build());
     }
+
     // Obtener las tareas de una lista mediante su id
-    @Transactional 
+    @Transactional
     public ResponseEntity<List<TaskResponseDetailsDto>> getTasksByListId(Long listId, Long userId) {
         try {
             // Validar que la lista le pertenece al usuario o le ha sido compartida
@@ -62,6 +65,7 @@ public class TaskService {
     }
 
     // Metodo para crear una tarea, se le pasa por parameto el id de la lista
+    @Transactional
     public ResponseEntity<TaskResponseDetailsDto> createTask(TaskRequestDto taskDto, Long listId, Long userId) {
         try {
             // Validacion de datos no nulos (titulo de la task)
@@ -91,6 +95,7 @@ public class TaskService {
     }
 
     // Metodo para actualizar la tarea mediante su id
+    @Transactional
     public ResponseEntity<TaskResponseDetailsDto> updateTask(TaskUpdateDto taskDto, Long taskId, Long userId) {
         try {
             // Se obtiene la entidad de la tarea para poder modificarlo y obtener el id de
@@ -119,26 +124,23 @@ public class TaskService {
             // repositorio
             if (taskDto.getTags() != null) {
                 // Se obtiene la lista
-                List<TagEntity> tagEntityList = taskDto.getTags().stream()
-                        // Se itera la lista y se obtiene una TagEntity por cada iteracion
-                        .map(tagName -> tagRepository.findByNameAndUser(tagName, userEntity)
-                                // Si el optional devuelto por el repositorio esta vacio, entonces se ejecuta
-                                // esta linea que lo guarda
-                                .orElseGet(() -> tagRepository.save(new TagEntity(tagName, userEntity))))
-                        // Asi se devuelve una lista NO INMUTABLE
-                        .toList();
+                List<TagEntity> tagEntityList = new ArrayList<>(
+                        taskDto.getTags().stream()
+                                .map(tagName -> tagRepository.findByNameAndUser(tagName, userEntity)
+                                        .orElseGet(() -> tagRepository.save(new TagEntity(tagName, userEntity))))
+                                .toList());
 
                 taskEntity.setTags(tagEntityList);
             }
 
             // Se retorna el dto de la task y se guarda en la base de datos la entidad
             return ResponseEntity.ok(new TaskResponseDetailsDto(taskRespository.save(taskEntity)));
-
         } catch (SecurityException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
+    @Transactional
     public ResponseEntity<String> deleteTask(Long taskId, Long userId) {
         try {
             // Se obtiene la entidad de la tarea para poder verificar si tiene relacion con

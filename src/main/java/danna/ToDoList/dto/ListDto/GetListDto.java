@@ -2,7 +2,7 @@ package danna.ToDoList.dto.ListDto;
 
 import java.util.List;
 
-import danna.ToDoList.dto.TaskResponseDetailsDto;
+import danna.ToDoList.dto.Task.TaskResponseDetailsDto;
 import danna.ToDoList.model.ListEntity;
 
 public class GetListDto {

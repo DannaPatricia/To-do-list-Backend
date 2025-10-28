@@ -1,4 +1,4 @@
-package danna.ToDoList.dto;
+package danna.ToDoList.dto.Task;
 
 import java.time.LocalDate;
 

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import danna.ToDoList.dto.TaskRequestDto;
-import danna.ToDoList.dto.TaskResponseDetailsDto;
-import danna.ToDoList.dto.TaskUpdateDto;
+import danna.ToDoList.dto.Task.TaskRequestDto;
+import danna.ToDoList.dto.Task.TaskResponseDetailsDto;
+import danna.ToDoList.dto.Task.TaskUpdateDto;
 import danna.ToDoList.security.CustomUserDetails;
 import danna.ToDoList.service.TaskService;
 

@@ -16,7 +16,7 @@ public class TagByUserDto {
         this.name = tagEntity.getName();
         this.userName = tagEntity.getUser().getUsername();
     }
-    
+
     // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
