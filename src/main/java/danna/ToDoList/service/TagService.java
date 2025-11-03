@@ -62,15 +62,8 @@ public class TagService {
             return ResponseEntity.status(404).body(response);
         }
 
-        // Obtener la entidad tarea
-        TaskEntity task = taskRepository.findById(createTagDto.getTaskId()).orElse(null);
-        if (task == null) {
-            response.put(RESPONSE_KEY, "Tarea no localizada");
-            return ResponseEntity.status(404).body(response);
-        }
-
         // Crear una nueva etiqueta con valores por defecto
-        TagEntity newTag = new TagEntity(createTagDto, user, task);
+        TagEntity newTag = new TagEntity(createTagDto, user);
 
         // Guardar la nueva etiqueta en la base de datos
         tagRepository.save(newTag);

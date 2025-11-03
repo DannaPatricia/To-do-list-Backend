@@ -56,8 +56,8 @@ public class TagEntity {
         this.tasks = List.of(task);
     }
 
-    public TagEntity(String name, UserEntity userEntity){
-        this.name = name;
+    public TagEntity(CreateTagDto createTagDto, UserEntity userEntity){
+        this.name = createTagDto.getName();
         this.user = userEntity;
     }
 
