@@ -187,5 +187,4 @@ public class ListService {
         // Enviar la lista validada para su uso
         return list;
     }
-
 }

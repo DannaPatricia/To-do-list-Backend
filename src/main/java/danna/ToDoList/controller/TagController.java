@@ -11,7 +11,10 @@ import danna.ToDoList.dto.TagDto.UpdateTagDto;
 import danna.ToDoList.security.CustomUserDetails;
 import danna.ToDoList.service.TagService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,27 +42,54 @@ public class TagController {
 
     // Crear una nueva etiqueta
     @PostMapping("/create")
-    public ResponseEntity<String> postMethodName(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+    public ResponseEntity<Map<String, String>> postMethodName(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody CreateTagDto createTagDto) {
+
         if (!createTagDto.isValid()) {
-            return ResponseEntity.status(409).body("Datos invalidos");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Datos inválidos");
+            return ResponseEntity.status(409).body(response);
         }
+
         return tagService.createTag(createTagDto, customUserDetails.getId());
     }
 
-    // Canbiar el nombre de una etiqueta
+    // Cambiar el nombre de una etiqueta
     @PutMapping("/update")
-    public ResponseEntity<String> putMethodName(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+    public ResponseEntity<Map<String, String>> putMethodName(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody UpdateTagDto updateTagDto) {
+
         if (!updateTagDto.isValid()) {
-            return ResponseEntity.status(409).body("Datos invalidos");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Datos inválidos");
+            return ResponseEntity.status(409).body(response);
         }
+
         return tagService.updateTag(customUserDetails.getId(), updateTagDto);
+    }
+
+    // Vicular una tag a una nueva lista
+    @PostMapping("/assign/{taskId}/{tagId}")
+    public ResponseEntity<Map<String, String>> assignTagToTask(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long taskId,
+            @PathVariable Long tagId) {
+        return tagService.assignTagToTask(customUserDetails.getId(), taskId, tagId);
+    }
+
+    @PostMapping("/unassign/{taskId}/{tagId}")
+    public ResponseEntity<Map<String, String>> unassignTagFromTask(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable Long taskId,
+            @PathVariable Long tagId) {
+        return tagService.unassignTagFromTask(customUserDetails.getId(), taskId, tagId);
     }
 
     // Eliminar una etiqueta
     @DeleteMapping("/delete/{tagId}")
-    public ResponseEntity<String> deleteTag(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+    public ResponseEntity<Map<String, String>> deleteTag(@AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Long tagId) {
         return tagService.deleteTag(customUserDetails.getId(), tagId);
     }

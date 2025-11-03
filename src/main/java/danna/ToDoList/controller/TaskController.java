@@ -1,6 +1,7 @@
 package danna.ToDoList.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,7 +66,7 @@ public class TaskController {
 
     // Eliminar una tarea
     @DeleteMapping("/delete/{taskId}")
-    public ResponseEntity<String> deleteTask(@PathVariable Long taskId,
+    public ResponseEntity<Map<String, String>> deleteTask(@PathVariable Long taskId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         if (taskId == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

@@ -1,7 +1,9 @@
 package danna.ToDoList.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ public class TaskService {
     private final UserRepository userRepository;
     private final ListRepository listRepository;
     private final TagRepository tagRepository;
+    private static final String RESPONSE_KEY = "message";
 
     public TaskService(TaskRespository taskRespository, UserRepository userRepository, ListRepository listRepository,
             TagRepository tagRepository) {
@@ -106,11 +109,6 @@ public class TaskService {
             // o le ha sido compartida
             getAndValidateList(taskEntity.getList().getId(), userId);
 
-            // Obtencion del entity del user para poder obtener las tags mediante el nombre
-            // de las tags y el userID
-            UserEntity userEntity = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_MESSAGE + userId));
-
             // Modificacion de los atributos del entity para guardarlo en la base de datos
             if (taskDto.getTitle() != null)
                 taskEntity.setTitle(taskDto.getTitle());
@@ -121,17 +119,6 @@ public class TaskService {
             if (taskDto.getDueDate() != null)
                 taskEntity.setDueDate(taskDto.getDueDate());
             // Para modificar las tags se obtiene la lista de TagEntity mediante el
-            // repositorio
-            if (taskDto.getTags() != null) {
-                // Se obtiene la lista
-                List<TagEntity> tagEntityList = new ArrayList<>(
-                        taskDto.getTags().stream()
-                                .map(tagName -> tagRepository.findByNameAndUser(tagName, userEntity)
-                                        .orElseGet(() -> tagRepository.save(new TagEntity(tagName, userEntity))))
-                                .toList());
-
-                taskEntity.setTags(tagEntityList);
-            }
 
             // Se retorna el dto de la task y se guarda en la base de datos la entidad
             return ResponseEntity.ok(new TaskResponseDetailsDto(taskRespository.save(taskEntity)));
@@ -140,20 +127,31 @@ public class TaskService {
         }
     }
 
+    // Eliminar una tarea
     @Transactional
-    public ResponseEntity<String> deleteTask(Long taskId, Long userId) {
+    public ResponseEntity<Map<String, String>> deleteTask(Long taskId, Long userId) {
+        Map<String, String> response = new HashMap<>();
         try {
-            // Se obtiene la entidad de la tarea para poder verificar si tiene relacion con
-            // el usuario y luego eliminarlo
+            // Se obtiene la entidad de la tarea
             TaskEntity taskEntity = taskRespository.findById(taskId)
                     .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_MESSAGE + userId));
-            // Se valida si la lista (donde esta guardada la tarea) le pertenece al usuario
-            // o le ha sido compartida
+
+            // Validar si la lista le pertenece al usuario o ha sido compartida
             getAndValidateList(taskEntity.getList().getId(), userId);
+
+            // Eliminar la tarea
             taskRespository.delete(taskEntity);
-            return ResponseEntity.ok("Tarea eliminada correctamente");
+
+            response.put(RESPONSE_KEY, "Tarea eliminada correctamente");
+            return ResponseEntity.ok(response);
+
         } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            response.put(RESPONSE_KEY, e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+
+        } catch (RuntimeException e) {
+            response.put(RESPONSE_KEY, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
