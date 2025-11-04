@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import danna.ToDoList.dto.UserDto;
 // DTOs
 import danna.ToDoList.dto.ListDto.GetListDto;
 import danna.ToDoList.dto.ListDto.ShareListDto;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/api/lists")
@@ -108,4 +108,16 @@ public class ListController {
         }
         return listService.deleteShareMe(listId, customUserDetails.getId());
     }
+
+    // Para ver todos los usuarios que estan conpartidos en la lista
+    @GetMapping("/share/{listId}")
+    public ResponseEntity<List<UserDto>> userShared(
+            @PathVariable Long listId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (listId == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return listService.userShared(listId, customUserDetails.getId());
+    }
+
 }

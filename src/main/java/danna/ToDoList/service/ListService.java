@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 
 // DTos
 import danna.ToDoList.dto.ListDto.ListDto;
+import danna.ToDoList.dto.UserDto;
 import danna.ToDoList.dto.ListDto.GetListDto;
 import danna.ToDoList.dto.ListDto.ShareListDto;
 
@@ -29,8 +30,9 @@ public class ListService {
     }
 
     // Metodo para obtener todas las listas del usuario, incluidas las compartidas
-    // Para quitar error de la carga de lasesion y que no me de error al momento de verr las task en el
-    @Transactional 
+    // Para quitar error de la carga de lasesion y que no me de error al momento de
+    // verr las task en el
+    @Transactional
     public ResponseEntity<List<GetListDto>> getListsByUser(Long userId) {
         // obtener todas las listas del user
         List<ListEntity> entities = listRepository.findByUserId(userId);
@@ -98,7 +100,7 @@ public class ListService {
         } catch (SecurityException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-    } 
+    }
 
     // Metodo para compartir una lista ya creada busncando el usuario y la lista por
     // el id
@@ -173,6 +175,30 @@ public class ListService {
             return ResponseEntity.ok().build();
         } catch (SecurityException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<List<UserDto>> userShared(Long listId, Long userId) {
+        try {
+            // Validar que el usuario sea dueño de la lista
+            ListEntity list = getAndValidateList(listId, userId);
+
+            // Obtener la lista de usuarios con los que está compartida
+            List<UserDto> sharedUsers = list.getSharedWith()
+                    .stream()
+                    .map(UserDto::new)
+                    .toList();
+
+            // Retornar la lista (puede estar vacía)
+            return sharedUsers.isEmpty()
+                    ? ResponseEntity.noContent().build()
+                    : ResponseEntity.ok(sharedUsers);
+
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
